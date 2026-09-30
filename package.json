@@ -1,0 +1,33 @@
+{
+  "name": "signal-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/core",
+    "web",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "vite --config web/vite.config.ts",
+    "build": "vite build --config web/vite.config.ts",
+    "check": "tsc --noEmit && tsc --noEmit -p backend/tsconfig.json",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "backend:dev": "wrangler dev --config backend/wrangler.jsonc",
+    "backend:types": "wrangler types --config backend/wrangler.jsonc backend/worker-configuration.d.ts"
+  },
+  "dependencies": {
+    "jose": "^6.2.12",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260930.1",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.2",
+    "wrangler": "^4.144.0"
+  }
+}
