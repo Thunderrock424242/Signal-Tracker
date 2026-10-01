@@ -4,7 +4,7 @@
 Build a real foundation for an iPhone field instrument for owned BLE beacons, authorized external RF receivers, and offline wilderness navigation. A static web dashboard reviews recordings; an account is necessary only for optional sync. Estimates, measurements, simulations, and public information remain distinct.
 
 ## Repository inspection
-The workspace is not currently a Git repository. Its only source is an IntelliJ Java Hello World with Gradle. No existing web, mobile, Cloudflare, authentication, Actions, or application architecture exists. Keep these files; do not invent a remote, initialize Git, publish, or provision paid resources.
+The workspace is not currently a Git repository. Its only source is an IntelliJ Java Hello World with Gradle. No existing web, mobile, Cloudflare, authentication, Actions, or application architecture exists. The user subsequently authorized replacing the entire placeholder structure. Remove Java/Gradle scaffolding; preserve unrelated changes. Git metadata and an origin were later added externally and are preserved. Do not publish or provision paid resources implicitly.
 
 ## Chosen architecture
 Use a monorepo with a native SwiftUI iOS 17 application, a dependency-free Swift core package, a TypeScript interchange/domain package, a Vite static dashboard, and an optional Workers/D1 API. A shared version-1 JSON contract connects Swift and TypeScript. Swift owns mobile acquisition and persistence. TypeScript owns browser validation and API input validation. Estimators use equivalent documented heuristics with deterministic tests; neither reports verified source locations.

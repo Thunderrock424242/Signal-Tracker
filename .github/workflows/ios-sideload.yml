@@ -1,0 +1,67 @@
+name: Build iPhone IPA for Windows sideloading
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-sideload-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  iphone:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test Swift core
+        run: swift test --package-path ios/SignalTrackerCore
+      - name: Test IPA packaging
+        run: python3 -m unittest discover -s scripts/tests -p 'test_*.py' -v
+      - name: Install project generator
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        working-directory: ios
+        run: xcodegen generate
+      - name: Build unsigned iPhone app
+        working-directory: ios
+        run: |
+          xcodebuild \
+            -project SignalTracker.xcodeproj \
+            -scheme SignalTracker \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
+      - name: Package unsigned IPA
+        run: |
+          python3 scripts/package-ios.py \
+            --app ios/build/Build/Products/Release-iphoneos/SignalTracker.app \
+            --output artifacts/SignalTracker-unsigned.ipa
+      - name: Create download checksum
+        working-directory: artifacts
+        run: shasum -a 256 SignalTracker-unsigned.ipa > SignalTracker-unsigned.ipa.sha256
+      - name: Upload iPhone download
+        uses: actions/upload-artifact@v4
+        with:
+          name: SignalTracker-unsigned-iphone
+          path: |
+            artifacts/SignalTracker-unsigned.ipa
+            artifacts/SignalTracker-unsigned.ipa.sha256
+          if-no-files-found: error
+          retention-days: 14
+      - name: Installation directions
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'INSTRUCTIONS'
+          ## Windows installation
+          Download **SignalTracker-unsigned-iphone** from this run's Artifacts section and extract the ZIP.
+          The device build is unsigned. Use **AltStore Classic / AltServer for Windows** to sign and install `SignalTracker-unsigned.ipa` with your own Apple account.
+          Follow `docs/WINDOWS_SIDELOADING.md` in this repository. Never put your Apple password in GitHub secrets or this workflow.
+          Building an IPA does not verify real BLE/GPS/RF behavior; test on your iPhone before field use.
+          INSTRUCTIONS

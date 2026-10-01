@@ -44,6 +44,11 @@ bin/
 
 # Signal Tracker
 node_modules/
+.artifacts/
+artifacts/
+__pycache__/
+*.pyc
+*.ipa
 web/dist/
 .wrangler/
 .env

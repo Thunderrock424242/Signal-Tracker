@@ -1,0 +1,36 @@
+name: Verify Signal Tracker
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  web-and-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: python3 -m unittest discover -s scripts/tests -p 'test_*.py' -v
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
+      - run: npx wrangler deploy --dry-run --config backend/wrangler.jsonc
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift test --package-path ios/SignalTrackerCore
+      - run: brew install xcodegen
+      - name: Generate native project
+        working-directory: ios
+        run: xcodegen generate
+      - name: Build for iOS Simulator
+        working-directory: ios
+        run: xcodebuild -project SignalTracker.xcodeproj -scheme SignalTracker -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build

@@ -11,7 +11,7 @@ Local-first radio exploration and wilderness navigation for owned beacons and au
 - `bridge/`: external receiver reference bridge; never synthesizes live RF readings.
 - `docs/`: architecture, operating limits, hardware protocol, setup, and verification evidence.
 
-The pre-existing Gradle/Java starter is preserved. It is independent of Signal Tracker's iOS/web builds.
+The placeholder Java/Gradle starter has been replaced with this modular native/web/backend structure.
 
 ## Run the dashboard
 
@@ -27,15 +27,31 @@ npm test
 npm run check
 npm run build
 npm run test:e2e
+npm run preview
 ```
 
 ## Build the iPhone app
 
-On macOS with Xcode and XcodeGen, run `cd ios && xcodegen generate`, then open `SignalTracker.xcodeproj`. Select a signing team and a real iPhone. See [iOS setup](docs/IOS.md). Windows cannot compile or sign an iOS app. The macOS CI job runs Swift core tests and the simulator build.
+On Windows, use the manual GitHub Actions iPhone build, download its unsigned IPA, then sign and install it with AltStore Classic/AltServer. Follow the [Windows sideloading guide](docs/WINDOWS_SIDELOADING.md). GitHub supplies the build Mac; you do not need to own one.
+
+If you have a Mac, Xcode and XcodeGen can build and install directly; see [iOS setup](docs/IOS.md). The supplied workflows prepare Swift tests, simulator compilation and an unsigned device build. They have not been executed here. No real IPA has been produced; native compilation and physical hardware validation remain outstanding.
 
 ## Optional cloud sync
 
 Local operation requires no account. The API is disabled until you configure an HTTPS OIDC issuer, audience, JWKS endpoint, allowed dashboard origin, and D1 database. See [backend setup](docs/WEB_DASHBOARD.md). No account credentials belong in Pages JavaScript. Cloud operations are explicit and foreground-only.
+
+## Documentation
+
+- [Architecture and data ownership](docs/ARCHITECTURE.md)
+- [Signal estimation and uncertainty](docs/SIGNAL_ESTIMATION.md)
+- [External receiver protocol](docs/RECEIVER_PROTOCOL.md)
+- [iPhone build and device setup](docs/IOS.md)
+- [Windows iPhone installation with AltStore](docs/WINDOWS_SIDELOADING.md)
+- [Dashboard, Pages, authentication and backend setup](docs/WEB_DASHBOARD.md)
+- [Privacy and deletion](docs/PRIVACY.md)
+- [Offline behavior and mapping boundaries](docs/OFFLINE_MODE.md)
+- [Hardware capabilities and acceptance](docs/HARDWARE.md)
+- [Verified results and remaining device checks](docs/VERIFICATION.md)
 
 ## Accuracy and privacy
 

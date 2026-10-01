@@ -1,0 +1,43 @@
+name: SignalTracker
+options:
+  bundleIdPrefix: com.thunder
+  deploymentTarget:
+    iOS: "17.0"
+packages:
+  SignalTrackerCore:
+    path: SignalTrackerCore
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    DEVELOPMENT_TEAM: ""
+targets:
+  SignalTracker:
+    type: application
+    platform: iOS
+    sources: [SignalTracker]
+    dependencies:
+      - package: SignalTrackerCore
+    info:
+      path: SignalTracker/Info.plist
+      properties:
+        CFBundleDisplayName: Signal Tracker
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
+        UILaunchScreen: {}
+        NSBluetoothAlwaysUsageDescription: Scan visible BLE advertisements so you can select your own beacon for a foreground signal hunt.
+        NSLocationWhenInUseUsageDescription: Record your route and attach GPS positions to signal samples while you use Signal Tracker.
+        NSLocalNetworkUsageDescription: Connect to a receiver bridge you explicitly configure on your local network.
+        CFBundleURLTypes:
+          - CFBundleURLSchemes: [signaltracker]
+        UIRequiredDeviceCapabilities: [arm64]
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.thunder.SignalTracker
+        TARGETED_DEVICE_FAMILY: "1,2"
+schemes:
+  SignalTracker:
+    build:
+      targets:
+        SignalTracker: all

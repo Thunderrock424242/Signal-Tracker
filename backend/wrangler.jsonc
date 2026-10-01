@@ -1,0 +1,30 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "signal-tracker-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true, "head_sampling_rate": 0.1 },
+  "vars": {
+    "OIDC_ISSUER": "https://configure-your-issuer.invalid/",
+    "OIDC_AUDIENCE": "signal-tracker",
+    "OIDC_JWKS_URL": "https://configure-your-issuer.invalid/.well-known/jwks.json",
+    "ALLOWED_ORIGINS": "http://localhost:5173",
+    "SYNC_ENABLED": "false",
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "signal-tracker",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "ratelimits": [
+    {
+      "name": "SYNC_RATE",
+      "namespace_id": "1101",
+      "simple": { "limit": 60, "period": 60 },
+    },
+  ],
+}

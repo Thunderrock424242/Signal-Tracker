@@ -14,8 +14,13 @@
     "check": "tsc --noEmit && tsc --noEmit -p backend/tsconfig.json",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:preview": "node scripts/verify-preview.mjs",
+    "preview": "vite preview --config web/vite.config.ts",
     "backend:dev": "wrangler dev --config backend/wrangler.jsonc",
-    "backend:types": "wrangler types --config backend/wrangler.jsonc backend/worker-configuration.d.ts"
+    "backend:types": "wrangler types --config backend/wrangler.jsonc backend/worker-configuration.d.ts",
+    "fixtures": "tsx scripts/generate-demo.ts",
+    "bridge": "tsx bridge/receiver-bridge.ts",
+    "backend:package": "wrangler deploy --dry-run --config backend/wrangler.jsonc"
   },
   "dependencies": {
     "jose": "^6.2.12",
@@ -25,6 +30,10 @@
     "@cloudflare/workers-types": "^5.20260930.1",
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.3",
+    "fake-indexeddb": "^6.2.5",
+    "miniflare": "^5.20260930.0-alpha",
+    "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
     "vitest": "^5.0.2",
