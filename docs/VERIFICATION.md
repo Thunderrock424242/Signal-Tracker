@@ -2,6 +2,14 @@
 
 Recorded on September 30, 2026, on Windows. This is implementation/build evidence, not a claim that an iPhone field trial, real RF hardware integration or deployed cloud sign-in has succeeded.
 
+## October 1 CI follow-up
+
+The supplied GitHub Xcode simulator log reports `property wrapper can only apply to a single variable` and exits with code 65. The four invalid declarations in BeaconsView, BookmarksView, ReceiversView and SettingsView are corrected by giving each property its own `@State`. A source scan and independent review found no remaining instances of this pattern or additional definite compile blockers; neither substitutes for compilation.
+
+The workflows now use Node 24 action runtimes: checkout/setup-node v5, IPA artifact upload v6, Pages configuration v6, Pages artifact upload v5 and Pages deployment v5. Their published action manifests were checked, including the Pages uploader's nested upload action. The project's configured Node 22 toolchain is unchanged. Workflow YAML passes Prettier parsing, 44 tests pass and strict TypeScript checks pass after the changes.
+
+The patched native app has not been rebuilt: this Windows host still lacks Xcode. Push these corrections and run **Verify Signal Tracker**, then run **Build iPhone IPA for Windows sideloading** for a device download. The supplied log's Swift delegate-isolation diagnostics are warnings in the configured Swift 5 language mode; they do not cause the reported failure. The Ubuntu migration and macOS capacity notices also do not explain the compiler errors.
+
 ## Completed locally
 
 | Check | Result and scope |
@@ -22,11 +30,11 @@ Recorded on September 30, 2026, on Windows. This is implementation/build evidenc
 
 The test sequence exposed and corrected a production service-worker cache mismatch caused by response Vary headers. Development-browser tests alone did not prove offline shell behavior. The production test now checks actual offline reloads.
 
-## Native checks prepared, not run
+## Native verification still outstanding
 
 The portable Swift package contains 13 XCTest cases covering interchange, sparse/stationary/poor-GPS/mixed-domain estimates, uncertainty, smoothing/dateline geometry, invalid imports, relative receiver power, protected-store/outbox recovery, formula-safe CSV, GPS gap segments, flat-power bearing rejection, interrupted-session recovery and mixed-session simulation disclosure.
 
-No Swift compiler or Xcode is available on this Windows host. These tests have not been compiled or executed. `ios/project.yml` and the macOS CI job prepare project generation and simulator compilation; neither constitutes a successful native build. The separate manual `ios-sideload.yml` workflow prepares an unsigned iPhoneOS IPA for Windows/AltStore installation; it has not run, and no real IPA is supplied. See [Windows sideloading](WINDOWS_SIDELOADING.md) or [Mac commands](IOS.md).
+No Swift compiler or Xcode is available on this Windows host. The Swift tests have not been compiled or executed locally, and their CI output was not supplied. The reported CI simulator attempt failed at app module emission; a successful native build remains unverified. The separate manual `ios-sideload.yml` workflow prepares an unsigned iPhoneOS IPA for Windows/AltStore installation; no successful device build or real IPA is supplied. See [Windows sideloading](WINDOWS_SIDELOADING.md) or [Mac commands](IOS.md).
 
 ## Required device and integration acceptance
 
